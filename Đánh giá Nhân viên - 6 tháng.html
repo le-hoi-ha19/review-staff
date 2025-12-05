@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)https://nguyendinhatk2.github.io/teamplate_review_staff/ -->
+<html lang="vi">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đánh giá Nhân viên - 6 tháng</title>
+  <link href="./Đánh giá Nhân viên - 6 tháng_files/css2" rel="stylesheet">
+  <style>
+    :root {
+      --bg-0: #071020;
+      --bg-1: #081628;
+      --card: rgba(255, 255, 255, 0.04);
+      --glass: rgba(255, 255, 255, 0.04);
+      --muted: rgba(255, 255, 255, 0.65);
+      --accent: #00f5d4;
+      --accent-2: #7c3aed;
+      --border: rgba(255, 255, 255, 0.06);
+      --soft: rgba(255, 255, 255, 0.02);
+      --radius: 14px;
+      --glass-border: rgba(255, 255, 255, 0.06);
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      color: #e6eef8;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(124, 58, 237, 0.12), transparent 12%),
+        radial-gradient(900px 500px at 90% 90%, rgba(0, 245, 212, 0.06), transparent 12%),
+        linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 100%);
+      -webkit-font-smoothing: antialiased;
+      padding: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    /* particle canvas behind */
+    #net-canvas {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.85
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1080px
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px;
+      border-radius: 16px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
+    }
+
+    header .title {
+      display: flex;
+      gap: 14px;
+      align-items: center
+    }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.14);
+      font-weight: 800;
+      color: #04111a;
+      font-size: 18px
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    .card {
+      margin-top: 18px;
+      border-radius: 16px;
+      padding: 20px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 12px 40px rgba(3, 10, 18, 0.6)
+    }
+
+    .meta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 10px
+    }
+
+    .pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      font-weight: 700
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px
+    }
+
+    @media(min-width:980px) {
+      .grid {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    .q {
+      padding: 14px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0.01));
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      min-height: 120px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .q::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 180px;
+      height: 180px;
+      background: conic-gradient(from 120deg, rgba(124, 58, 237, 0.08), rgba(0, 245, 212, 0.06));
+      filter: blur(18px);
+      transform: rotate(20deg);
+      opacity: 0.8
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      margin-bottom: 6px
+    }
+
+    .section-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px
+    }
+
+    /* fancy pills for rating */
+    .rating {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .rating input {
+      display: none
+    }
+
+    .rating label {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: transparent;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 700;
+      font-size: 13px;
+      transition: transform .18s cubic-bezier(.2, .9, .2, 1), box-shadow .18s
+    }
+
+    .rating label:hover {
+      transform: translateY(-4px) scale(1.02)
+    }
+
+    .rating input:checked+label {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #021018;
+      box-shadow: 0 10px 40px rgba(0, 245, 212, 0.08);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 78px;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: linear-gradient(180deg, rgba(2, 6, 23, 0.2), rgba(2, 6, 23, 0.14));
+      color: #d9f7f0;
+      font-size: 14px;
+      resize: vertical
+    }
+
+    textarea::placeholder {
+      color: rgba(255, 255, 255, 0.5)
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px
+    }
+
+    @media(min-width:880px) {
+      .two-col {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 14px
+    }
+
+    .btn {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      font-weight: 800;
+      cursor: pointer
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #04111a;
+      box-shadow: 0 12px 40px rgba(124, 58, 237, 0.12)
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--muted)
+    }
+
+    /* subtle hover lift for cards */
+    .card:hover {
+      transform: translateY(-2px);
+      transition: transform .22s ease
+    }
+
+    /* blockchain-like node list */
+    .chain {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 8px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      min-width: 120px
+    }
+
+    .node .dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      box-shadow: 0 8px 30px rgba(0, 245, 212, 0.06)
+    }
+
+    .node small {
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    /* animated badges */
+    .spark {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.03)
+    }
+
+    /* subtle floating animation */
+    @keyframes floaty {
+      0% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-6px)
+      }
+
+      100% {
+        transform: translateY(0)
+      }
+    }
+
+    .logo,
+    .node,
+    .spark {
+      animation: floaty 6s ease-in-out infinite
+    }
+
+    /* focus ring for accessibility */
+    input[type="radio"]:focus+label {
+      outline: 2px solid rgba(0, 245, 212, 0.12);
+      outline-offset: 4px
+    }
+
+    /* small responsive tweaks */
+    @media(max-width:520px) {
+      header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start
+      }
+
+      .grid {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body cz-shortcut-listen="true">
+  <canvas id="net-canvas" width="1920" height="945"></canvas>
+
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <div class="logo">BC</div>
+        <div>
+          <h1>Đánh giá 6 tháng — Lê Hội Hà</h1>
+          <p>Giao diện chuyên nghiệp, hiệu ứng mạng blockchain và animation mượt.</p>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="pill">Báo cáo: Nội bộ</div>
+        <div class="pill">Ngày: <strong style="margin-left:6px">05/12/2025</strong></div>
+      </div>
+    </header>
+
+    <div class="card">
+      <form id="reviewForm" autocomplete="off">
+        <div class="grid">
+          <div class="q">
+            <div class="section-title">KHẢ NĂNG THÍCH NGHI &amp; LINH HOẠT</div>
+            <div class="section-sub">Mức độ thích nghi, xử lý thay đổi.</div>
+            <div class="rating" role="radiogroup" aria-label="adaptability">
+              <input type="radio" id="adapt-1" name="adaptability" value="Yếu"><label for="adapt-1">Yếu</label>
+              <input type="radio" id="adapt-2" name="adaptability" value="Trung bình"><label for="adapt-2">Trung
+                bình</label>
+              <input type="radio" id="adapt-3" name="adaptability" value="Khá"><label for="adapt-3">Khá</label>
+              <input type="radio" id="adapt-4" name="adaptability" value="Giỏi"><label for="adapt-4">Giỏi</label>
+            </div>
+            <div style="margin-top:10px"><textarea name="adaptability_note"
+                placeholder="Ví dụ: phản ứng khi thay đổi, speed learning...">Thích nghi nhanh với môi trường làm việc mới và quy trình của công ty.</textarea>
+            </div>
+          </div>
+
+          <div class="q">
+            <div class="section-title">CHẤT LƯỢNG CÔNG VIỆC</div>
+            <div class="section-sub">Độ chính xác, tuân thủ tiêu chuẩn.</div>
+            <div class="rating">
+              <input type="radio" id="quality-1" name="quality" value="Yếu"><label for="quality-1">Yếu</label>
+              <input type="radio" id="quality-2" name="quality" value="Trung bình"><label for="quality-2">Trung
+                bình</label>
+              <input type="radio" id="quality-3" name="quality" value="Khá"><label for="quality-3">Khá</label>
+              <input type="radio" id="quality-4" name="quality" value="Giỏi"><label for="quality-4">Giỏi</label>
+            </div>
+            <div style="margin-top:10px"><textarea name="quality_note"
+                placeholder="Ví dụ: bugs, code review, hoàn thành...">Code chạy đúng yêu cầu, đang trong quá trình cải thiện code quality.  Cần chú ý hơn clean code principles.</textarea>
+            </div>
+          </div>
+
+          <div class="q">
+            <div class="section-title">TRÁCH NHIỆM</div>
+            <div class="section-sub">Chủ động &amp; hoàn thành nhiệm vụ.</div>
+            <div class="rating">
+              <input type="radio" id="resp-1" name="responsibility" value="Yếu"><label for="resp-1">Yếu</label>
+              <input type="radio" id="resp-2" name="responsibility" value="Trung bình"><label for="resp-2">Trung
+                bình</label>
+              <input type="radio" id="resp-3" name="responsibility" value="Khá"><label for="resp-3">Khá</label>
+              <input type="radio" id="resp-4" name="responsibility" value="Giỏi"><label for="resp-4">Giỏi</label>
+            </div>
+            <div style="margin-top:10px"><textarea name="responsibility_note"
+                placeholder="Ghi ví dụ rõ ràng...">chủ động yêu cầu thêm việc khi hoàn thành hết task của bản thân, hỗ trợ anh long và quân bổ sung các case trong phase-2 lixway</textarea>
+            </div>
+          </div>
+
+          <div class="q">
+            <div class="section-title">GIAO TIẾP</div>
+            <div class="section-sub">Kỹ năng nói &amp; viết.</div>
+            <div class="rating">
+              <input type="radio" id="comm-1" name="communication" value="Yếu"><label for="comm-1">Yếu</label>
+              <input type="radio" id="comm-2" name="communication" value="Trung bình"><label for="comm-2">Trung
+                bình</label>
+              <input type="radio" id="comm-3" name="communication" value="Khá"><label for="comm-3">Khá</label>
+              <input type="radio" id="comm-4" name="communication" value="Giỏi"><label for="comm-4">Giỏi</label>
+            </div>
+            <div style="margin-top:10px"><textarea name="communication_note"
+                placeholder="Ví dụ: mail, thuyết trình...">giao tiếp hòa đồng với mọi người</textarea></div>
+          </div>
+
+          <div class="q">
+            <div class="section-title">LÃNH ĐẠO</div>
+            <div class="section-sub">Dẫn dắt, mentoring, phân công.</div>
+            <div class="rating">
+              <input type="radio" id="lead-1" name="leadership" value="Yếu"><label for="lead-1">Yếu</label>
+              <input type="radio" id="lead-2" name="leadership" value="Trung bình"><label for="lead-2">Trung
+                bình</label>
+              <input type="radio" id="lead-3" name="leadership" value="Khá"><label for="lead-3">Khá</label>
+              <input type="radio" id="lead-4" name="leadership" value="Giỏi"><label for="lead-4">Giỏi</label>
+            </div>
+            <div style="margin-top:10px"><textarea name="leadership_note"
+                placeholder="Ví dụ: dự án, điều phối..."> còn non do chưa có kinh nghiệm</textarea></div>
+          </div>
+
+          <div class="q">
+            <div class="section-title">KỸ NĂNG TÀI LIỆU</div>
+            <div class="section-sub">Chuẩn hoá, README, comment.</div>
+            <div class="rating">
+              <input type="radio" id="doc-1" name="documentation" value="Yếu"><label for="doc-1">Yếu</label>
+              <input type="radio" id="doc-2" name="documentation" value="Trung bình"><label for="doc-2">Trung
+                bình</label>
+              <input type="radio" id="doc-3" name="documentation" value="Khá"><label for="doc-3">Khá</label>
+              <input type="radio" id="doc-4" name="documentation" value="Giỏi"><label for="doc-4">Giỏi</label>
+            </div>
+            <div style="margin-top:10px"><textarea name="documentation_note"
+                placeholder="Ví dụ: template, structure...">Có ghi chú lại các kiến thức học được để sẵn sàng chia sẻ trong team để cùng nhau phát triển.</textarea>
+            </div>
+          </div>
+
+          <div class="q">
+            <div class="section-title">ĐÀM PHÁN</div>
+            <div class="section-sub">Thương lượng &amp; thuyết phục.</div>
+            <div class="rating">
+              <input type="radio" id="nego-1" name="negotiation" value="Yếu"><label for="nego-1">Yếu</label>
+              <input type="radio" id="nego-2" name="negotiation" value="Trung bình"><label for="nego-2">Trung
+                bình</label>
+              <input type="radio" id="nego-3" name="negotiation" value="Khá"><label for="nego-3">Khá</label>
+              <input type="radio" id="nego-4" name="negotiation" value="Giỏi"><label for="nego-4">Giỏi</label>
+            </div>
+            <div style="margin-top:10px"><textarea name="negotiation_note"
+                placeholder="Kết quả, ví dụ..."> còn non do chưa có kinh nghiệm</textarea></div>
+          </div>
+
+          <div class="q">
+            <div class="section-title">NGOẠI NGỮ — TIẾNG ANH</div>
+            <div class="section-sub">Đọc hiểu, giao tiếp, viết tài liệu.</div>
+            <div class="rating">
+              <input type="radio" id="eng-1" name="english" value="Yếu"><label for="eng-1">Yếu</label>
+              <input type="radio" id="eng-2" name="english" value="Trung bình"><label for="eng-2">Trung bình</label>
+              <input type="radio" id="eng-3" name="english" value="Khá"><label for="eng-3">Khá</label>
+              <input type="radio" id="eng-4" name="english" value="Giỏi"><label for="eng-4">Giỏi</label>
+            </div>
+            <div style="margin-top:10px"><textarea name="english_note"
+                placeholder="Ví dụ: đọc docs, call, dịch..."> 
+-có thể đọc hiểu dc document và viết tiếng anh đáp ứng được nhu cầu công việc về tài liệu
+- sử dụng tiếng anh trong viết code
+</textarea>
+            </div>
+          </div>
+
+          <div class="q two-col" style="grid-column: 1 / -1">
+            <div>
+              <div class="section-title">Tổng kết 6 tháng</div>
+              <textarea name="summary" placeholder="Điểm mạnh, điểm cần cải thiện">
+-điểm mạnh: ham học hỏi, chủ động trong công việc không hiểu thì hỏi không dấu dốt, hòa đồng với mọi người
+-điểm cần cải thiện: cần nâng cao kỹ năng chuyên môn, cải thiện code quality, học thêm tiếng anh giao tiếp
+              </textarea>
+            </div>
+            <div>
+              <div class="section-title">Kế hoạch 6 tháng tới</div>
+              <textarea name="plan" placeholder="KPI, hành động cụ thể">
+- học thêm flutter và angular để có thể tham gia đa dạng dự án hơn
+- cải thiện code quality, tìm hiểu thêm về clean code và design patterns
+- học thêm tiếng anh giao tiếp để có cơ hội làm việc với khách hàng quốc tế
+</textarea>
+
+                </textarea>
+            </div>
+          </div>
+
+          <div class="q" style="grid-column: 1 / -1">
+            <div class="section-title">Kết quả đạt được</div>
+            <textarea name="result" placeholder="Số liệu, milestone hoàn thành">
+-hoàn thành 30 feature và 80 bug trong dự án lixway phase-1 
+            </textarea>
+          </div>
+
+          <div class="q" style="grid-column: 1 / -1">
+            <div class="section-title">Nguyện vọng nhân viên</div>
+            <textarea name="desire"
+              placeholder="Lương, vị trí, học tập...">Mong muốn được tăng lương và tham gia nhiều dự án đa dạng để tích lũy kinh nghiệm cũng như nâng cao kỹ năng chuyên môn.</textarea>
+          </div>
+
+          <div class="q" style="grid-column: 1 / -1">
+            <div class="section-title">3 người muốn làm việc cùng nhất</div>
+            <textarea name="preferredCoworkers" placeholder="Tên 1, Tên 2, Tên 3">Anh át, Anh long, Quân</textarea>
+          </div>
+
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn btn-ghost"
+            onclick="document.getElementById('reviewForm').reset()">Reset</button>
+          <button type="submit" class="btn btn-primary">Lưu &amp; Xuất</button>
+        </div>
+      </form>
+    </div>
+
+    <div style="height:18px"></div>
+
+  </div>
+
+  <script>
+    // Minimal form handler
+    document.getElementById('reviewForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const data = new FormData(e.target);
+      const obj = {};
+      for (const [k, v] of data.entries()) {
+        if (!obj[k]) obj[k] = v; else obj[k] += ', ' + v;
+      }
+      console.log('Form data:', obj);
+      // show a neat modal-like toast
+      const toast = document.createElement('div');
+      toast.textContent = 'Đã lưu tạm — mở console (F12) để xem JSON.';
+      Object.assign(toast.style, { position: 'fixed', right: '20px', bottom: '20px', background: 'linear-gradient(90deg,#00f5d4,#7c3aed)', color: '#041018', padding: '12px 16px', borderRadius: '12px', fontWeight: 800, boxShadow: '0 12px 36px rgba(124,58,237,0.12)' });
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3500);
+    });
+
+    // Particle network to simulate blockchain graph
+    const canvas = document.getElementById('net-canvas');
+    const ctx = canvas.getContext('2d');
+    let w = canvas.width = innerWidth;
+    let h = canvas.height = innerHeight;
+    const nodes = [];
+    const NODE_COUNT = Math.min(40, Math.floor((w * h) / 90000));
+
+    function rand(min, max) { return Math.random() * (max - min) + min }
+
+    class Node { constructor() { this.x = rand(0, w); this.y = rand(0, h); this.vx = rand(-0.3, 0.3); this.vy = rand(-0.3, 0.3); this.r = rand(1.5, 3.5); this.hue = rand(160, 290) } update() { this.x += this.vx; this.y += this.vy; if (this.x < 0 || this.x > w) this.vx *= -1; if (this.y < 0 || this.y > h) this.vy *= -1 } draw() { ctx.beginPath(); ctx.fillStyle = 'rgba(0,245,212,0.9)'; ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); ctx.fill() } }
+
+    for (let i = 0; i < NODE_COUNT; i++) nodes.push(new Node());
+
+    function render() {
+      ctx.clearRect(0, 0, w, h);
+      // connect close nodes
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        a.update();
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y; const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 160) {
+            const alpha = 0.12 * (1 - d / 160);
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(0,245,212,' + alpha + ')';
+            ctx.lineWidth = 1;
+            ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+        a.draw();
+      }
+      requestAnimationFrame(render);
+    }
+    render();
+
+    window.addEventListener('resize', () => { w = canvas.width = innerWidth; h = canvas.height = innerHeight });
+    window.addEventListener("DOMContentLoaded", () => {
+      const defaults = [
+        "adapt-3",
+        "quality-3",
+        "responsibility-3",
+        "resp-3",
+        "comm-3",
+        "lead-2",
+        "doc-3",
+        "nego-2",
+        "eng-3"
+      ];
+      defaults.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.checked = true;
+      });
+    });
+  </script>
+
+
+</body>
+
+</html>
